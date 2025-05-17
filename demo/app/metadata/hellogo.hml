@@ -26,8 +26,34 @@ definition:
           aggregate_functions: {}
           comparison_operators: {}
       object_types:
+        BusinessLogicResult:
+          description: defines the result of the BusinessLogic function
+          fields:
+            environment:
+              type:
+                name: String
+                type: named
+            rowData:
+              type:
+                name: DatabaseRow
+                type: named
         CreateAuthorResult:
           fields:
+            id:
+              type:
+                name: Int32
+                type: named
+            name:
+              type:
+                name: String
+                type: named
+        DatabaseRow:
+          description: represents the data returned from the database query
+          fields:
+            description:
+              type:
+                name: String
+                type: named
             id:
               type:
                 name: Int32
@@ -48,6 +74,14 @@ definition:
                 type: named
       collections: []
       functions:
+        - name: businessLogic
+          description: 'calls a REST API, extracts the environment value, and uses it to query a Postgres database  Example:  curl http://localhost:8080/query -H ''content-type: application/json'' -d \ ''{ "collection": "businessLogic", "arguments": {}, "collection_relationships": {}, "query": { "fields": { "environment": { "type": "column", "column": "environment" }, "rowData": { "type": "column", "column": "rowData" } } } }'''
+          arguments: {}
+          result_type:
+            type: nullable
+            underlying_type:
+              name: BusinessLogicResult
+              type: named
         - name: hello
           description: 'sends a hello message Function is an operation type of query, the name of function will be `hello`  Example:  curl http://localhost:8080/query -H ''content-type: application/json'' -d \ ''{ "collection": "hello", "arguments": { "greeting": { "type": "literal", "value": "Hello world!" } }, "collection_relationships": {}, "query": { "fields": { "reply": { "type": "column", "column": "reply" }, "count": { "type": "column", "column": "count" } } } }'''
           arguments:

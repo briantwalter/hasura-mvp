@@ -30,14 +30,7 @@ type DatabaseRow struct {
 	Description string `json:"description"`
 }
 
-// ToMap encodes the struct to a value map
-func (j DatabaseRow) ToMap() map[string]any {
-	r := make(map[string]any)
-	r["id"] = j.ID
-	r["name"] = j.Name
-	r["description"] = j.Description
-	return r
-}
+// ToMap method is provided by types.generated.go
 
 // BusinessLogicArguments defines the arguments for the BusinessLogic function
 type BusinessLogicArguments struct {
@@ -56,13 +49,7 @@ type BusinessLogicResult struct {
 	RowData     DatabaseRow `json:"rowData"`
 }
 
-// ToMap encodes the struct to a value map
-func (j BusinessLogicResult) ToMap() map[string]any {
-	r := make(map[string]any)
-	r["environment"] = j.Environment
-	r["rowData"] = j.RowData
-	return r
-}
+// Note: ToMap method is now provided by types.generated.go
 
 // FunctionBusinessLogic calls a REST API, extracts the environment value,
 // and uses it to query a Postgres database

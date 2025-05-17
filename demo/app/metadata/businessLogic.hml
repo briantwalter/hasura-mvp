@@ -1,0 +1,103 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DatabaseRow
+  description: represents the data returned from the database query
+  fields:
+    - name: description
+      type: String!
+    - name: id
+      type: int32!
+    - name: name
+      type: String!
+  graphql:
+    typeName: DatabaseRow
+    inputTypeName: DatabaseRow_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: hellogo
+      dataConnectorObjectType: DatabaseRow
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DatabaseRow
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - description
+          - id
+          - name
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: BusinessLogicResult
+  description: defines the result of the BusinessLogic function
+  fields:
+    - name: environment
+      type: String!
+    - name: rowData
+      type: DatabaseRow!
+  graphql:
+    typeName: BusinessLogicResult
+    inputTypeName: BusinessLogicResult_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: hellogo
+      dataConnectorObjectType: BusinessLogicResult
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: BusinessLogicResult
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - environment
+          - rowData
+
+---
+kind: Command
+version: v1
+definition:
+  name: businessLogic
+  outputType: BusinessLogicResult
+  source:
+    dataConnectorName: hellogo
+    dataConnectorCommand:
+      function: businessLogic
+  graphql:
+    rootFieldName: businessLogic
+    rootFieldKind: Query
+  description: >
+
+    Development Mode Control
+
+    - `APP_ENV`: Controls application environment
+    - When set to `"development"`, returns mock data instead of querying the database
+
+    Database Connection Variables
+
+    Required when `APP_ENV` is not `"development"`
+    
+     - `DB_HOST`     Database server hostname or IP address
+     - `DB_PORT`     Database server port                  
+     - `DB_USER`     Database username                     
+     - `DB_PASSWORD` Database password
+     - `DB_NAME`     Database name    
+    
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: businessLogic
+  permissions:
+    - role: admin
+      allowExecution: true
+

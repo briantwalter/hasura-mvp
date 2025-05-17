@@ -28,8 +28,27 @@ func (j *HelloArguments) FromValue(input map[string]any) error {
 }
 
 // ToMap encodes the struct to a value map
+func (j BusinessLogicResult) ToMap() map[string]any {
+	r := make(map[string]any)
+	r["environment"] = j.Environment
+	r["rowData"] = j.RowData
+
+	return r
+}
+
+// ToMap encodes the struct to a value map
 func (j CreateAuthorResult) ToMap() map[string]any {
 	r := make(map[string]any)
+	r["id"] = j.ID
+	r["name"] = j.Name
+
+	return r
+}
+
+// ToMap encodes the struct to a value map
+func (j DatabaseRow) ToMap() map[string]any {
+	r := make(map[string]any)
+	r["description"] = j.Description
 	r["id"] = j.ID
 	r["name"] = j.Name
 
@@ -80,43 +99,6 @@ func (dch DataConnectorHandler) execQuery(ctx context.Context, state *types.Stat
 	span := trace.SpanFromContext(ctx)
 	logger := connector.GetLogger(ctx)
 	switch request.Collection {
-	case "hello":
-
-		selection, err := queryFields.AsObject()
-		if err != nil {
-			return nil, schema.UnprocessableContentError("the selection field type must be object", map[string]any{
-				"cause": err.Error(),
-			})
-		}
-		var args HelloArguments
-		parseErr := args.FromValue(rawArgs)
-		if parseErr != nil {
-			return nil, schema.UnprocessableContentError("failed to resolve arguments", map[string]any{
-				"cause": parseErr.Error(),
-			})
-		}
-
-		connector_addSpanEvent(span, logger, "execute_function", map[string]any{
-			"arguments": args,
-		})
-		rawResult, err := FunctionHello(ctx, state, &args)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if rawResult == nil {
-			return nil, nil
-		}
-		connector_addSpanEvent(span, logger, "evaluate_response_selection", map[string]any{
-			"raw_result": rawResult,
-		})
-		result, err := utils.EvalNestedColumnObject(selection, rawResult)
-		if err != nil {
-			return nil, err
-		}
-		return result, nil
-		
 	case "businessLogic":
 
 		selection, err := queryFields.AsObject()
@@ -154,12 +136,49 @@ func (dch DataConnectorHandler) execQuery(ctx context.Context, state *types.Stat
 		}
 		return result, nil
 
+	case "hello":
+
+		selection, err := queryFields.AsObject()
+		if err != nil {
+			return nil, schema.UnprocessableContentError("the selection field type must be object", map[string]any{
+				"cause": err.Error(),
+			})
+		}
+		var args HelloArguments
+		parseErr := args.FromValue(rawArgs)
+		if parseErr != nil {
+			return nil, schema.UnprocessableContentError("failed to resolve arguments", map[string]any{
+				"cause": parseErr.Error(),
+			})
+		}
+
+		connector_addSpanEvent(span, logger, "execute_function", map[string]any{
+			"arguments": args,
+		})
+		rawResult, err := FunctionHello(ctx, state, &args)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if rawResult == nil {
+			return nil, nil
+		}
+		connector_addSpanEvent(span, logger, "evaluate_response_selection", map[string]any{
+			"raw_result": rawResult,
+		})
+		result, err := utils.EvalNestedColumnObject(selection, rawResult)
+		if err != nil {
+			return nil, err
+		}
+		return result, nil
+
 	default:
 		return nil, utils.ErrHandlerNotfound
 	}
 }
 
-var enumValues_FunctionName = []string{"hello", "businessLogic"}
+var enumValues_FunctionName = []string{"businessLogic", "hello"}
 
 // MutationExists check if the mutation name exists
 func (dch DataConnectorHandler) MutationExists(name string) bool {
