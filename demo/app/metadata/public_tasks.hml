@@ -1,0 +1,161 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: public_tasks
+  fields:
+    - name: due_date
+      type: date
+    - name: priority
+      type: string
+    - name: related_to
+      type: string
+    - name: status
+      type: string
+    - name: subject
+      type: string
+    - name: task_id
+      type: string!
+  graphql:
+    typeName: public_tasks
+    inputTypeName: public_tasks_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: crm
+      dataConnectorObjectType: public.tasks
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: public_tasks
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - due_date
+          - priority
+          - related_to
+          - status
+          - subject
+          - task_id
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: public_tasks_bool_exp
+  operand:
+    object:
+      type: public_tasks
+      comparableFields:
+        - fieldName: due_date
+          booleanExpressionType: date_bool_exp
+        - fieldName: priority
+          booleanExpressionType: text_bool_exp
+        - fieldName: related_to
+          booleanExpressionType: text_bool_exp
+        - fieldName: status
+          booleanExpressionType: text_bool_exp
+        - fieldName: subject
+          booleanExpressionType: text_bool_exp
+        - fieldName: task_id
+          booleanExpressionType: text_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: public_tasks_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: public_tasks_agg_exp
+  operand:
+    object:
+      aggregatedType: public_tasks
+      aggregatableFields:
+        - fieldName: due_date
+          aggregateExpression: date_agg_exp
+        - fieldName: priority
+          aggregateExpression: text_agg_exp
+        - fieldName: related_to
+          aggregateExpression: text_agg_exp
+        - fieldName: status
+          aggregateExpression: text_agg_exp
+        - fieldName: subject
+          aggregateExpression: text_agg_exp
+        - fieldName: task_id
+          aggregateExpression: text_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: public_tasks_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: public_tasks_order_by_exp
+  operand:
+    object:
+      orderedType: public_tasks
+      orderableFields:
+        - fieldName: due_date
+          orderByExpression: date_order_by_exp
+        - fieldName: priority
+          orderByExpression: string_order_by_exp
+        - fieldName: related_to
+          orderByExpression: string_order_by_exp
+        - fieldName: status
+          orderByExpression: string_order_by_exp
+        - fieldName: subject
+          orderByExpression: string_order_by_exp
+        - fieldName: task_id
+          orderByExpression: string_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: public_tasks_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: public_tasks
+  objectType: public_tasks
+  source:
+    dataConnectorName: crm
+    collection: public.tasks
+  filterExpressionType: public_tasks_bool_exp
+  aggregateExpression: public_tasks_agg_exp
+  orderByExpression: public_tasks_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: public_tasks
+      subscription:
+        rootField: public_tasks
+    selectUniques:
+      - queryRootField: public_tasks_by_task_id
+        uniqueIdentifier:
+          - task_id
+        subscription:
+          rootField: public_tasks_by_task_id
+    filterInputTypeName: public_tasks_filter_input
+    aggregate:
+      queryRootField: public_tasks_aggregate
+      subscription:
+        rootField: public_tasks_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: public_tasks
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

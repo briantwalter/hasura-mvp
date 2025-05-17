@@ -1,0 +1,161 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: public_opportunities
+  fields:
+    - name: account_id
+      type: string
+    - name: amount
+      type: bigdecimal
+    - name: close_date
+      type: date
+    - name: name
+      type: string
+    - name: opportunity_id
+      type: string!
+    - name: stage
+      type: string
+  graphql:
+    typeName: public_opportunities
+    inputTypeName: public_opportunities_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: crm
+      dataConnectorObjectType: public.opportunities
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: public_opportunities
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - account_id
+          - amount
+          - close_date
+          - name
+          - opportunity_id
+          - stage
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: public_opportunities_bool_exp
+  operand:
+    object:
+      type: public_opportunities
+      comparableFields:
+        - fieldName: account_id
+          booleanExpressionType: text_bool_exp
+        - fieldName: amount
+          booleanExpressionType: numeric_bool_exp
+        - fieldName: close_date
+          booleanExpressionType: date_bool_exp
+        - fieldName: name
+          booleanExpressionType: text_bool_exp
+        - fieldName: opportunity_id
+          booleanExpressionType: text_bool_exp
+        - fieldName: stage
+          booleanExpressionType: text_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: public_opportunities_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: public_opportunities_agg_exp
+  operand:
+    object:
+      aggregatedType: public_opportunities
+      aggregatableFields:
+        - fieldName: account_id
+          aggregateExpression: text_agg_exp
+        - fieldName: amount
+          aggregateExpression: numeric_agg_exp
+        - fieldName: close_date
+          aggregateExpression: date_agg_exp
+        - fieldName: name
+          aggregateExpression: text_agg_exp
+        - fieldName: opportunity_id
+          aggregateExpression: text_agg_exp
+        - fieldName: stage
+          aggregateExpression: text_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: public_opportunities_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: public_opportunities_order_by_exp
+  operand:
+    object:
+      orderedType: public_opportunities
+      orderableFields:
+        - fieldName: account_id
+          orderByExpression: string_order_by_exp
+        - fieldName: amount
+          orderByExpression: bigdecimal_order_by_exp
+        - fieldName: close_date
+          orderByExpression: date_order_by_exp
+        - fieldName: name
+          orderByExpression: string_order_by_exp
+        - fieldName: opportunity_id
+          orderByExpression: string_order_by_exp
+        - fieldName: stage
+          orderByExpression: string_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: public_opportunities_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: public_opportunities
+  objectType: public_opportunities
+  source:
+    dataConnectorName: crm
+    collection: public.opportunities
+  filterExpressionType: public_opportunities_bool_exp
+  aggregateExpression: public_opportunities_agg_exp
+  orderByExpression: public_opportunities_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: public_opportunities
+      subscription:
+        rootField: public_opportunities
+    selectUniques:
+      - queryRootField: public_opportunities_by_opportunity_id
+        uniqueIdentifier:
+          - opportunity_id
+        subscription:
+          rootField: public_opportunities_by_opportunity_id
+    filterInputTypeName: public_opportunities_filter_input
+    aggregate:
+      queryRootField: public_opportunities_aggregate
+      subscription:
+        rootField: public_opportunities_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: public_opportunities
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

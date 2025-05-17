@@ -1,0 +1,161 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: public_accounts
+  fields:
+    - name: account_id
+      type: string!
+    - name: account_name
+      type: string
+    - name: billing_city
+      type: string
+    - name: billing_country
+      type: string
+    - name: billing_state
+      type: string
+    - name: industry
+      type: string
+  graphql:
+    typeName: public_accounts
+    inputTypeName: public_accounts_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: crm
+      dataConnectorObjectType: public.accounts
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: public_accounts
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - account_id
+          - account_name
+          - billing_city
+          - billing_country
+          - billing_state
+          - industry
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: public_accounts_bool_exp
+  operand:
+    object:
+      type: public_accounts
+      comparableFields:
+        - fieldName: account_id
+          booleanExpressionType: text_bool_exp
+        - fieldName: account_name
+          booleanExpressionType: text_bool_exp
+        - fieldName: billing_city
+          booleanExpressionType: text_bool_exp
+        - fieldName: billing_country
+          booleanExpressionType: text_bool_exp
+        - fieldName: billing_state
+          booleanExpressionType: text_bool_exp
+        - fieldName: industry
+          booleanExpressionType: text_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: public_accounts_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: public_accounts_agg_exp
+  operand:
+    object:
+      aggregatedType: public_accounts
+      aggregatableFields:
+        - fieldName: account_id
+          aggregateExpression: text_agg_exp
+        - fieldName: account_name
+          aggregateExpression: text_agg_exp
+        - fieldName: billing_city
+          aggregateExpression: text_agg_exp
+        - fieldName: billing_country
+          aggregateExpression: text_agg_exp
+        - fieldName: billing_state
+          aggregateExpression: text_agg_exp
+        - fieldName: industry
+          aggregateExpression: text_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: public_accounts_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: public_accounts_order_by_exp
+  operand:
+    object:
+      orderedType: public_accounts
+      orderableFields:
+        - fieldName: account_id
+          orderByExpression: string_order_by_exp
+        - fieldName: account_name
+          orderByExpression: string_order_by_exp
+        - fieldName: billing_city
+          orderByExpression: string_order_by_exp
+        - fieldName: billing_country
+          orderByExpression: string_order_by_exp
+        - fieldName: billing_state
+          orderByExpression: string_order_by_exp
+        - fieldName: industry
+          orderByExpression: string_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: public_accounts_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: public_accounts
+  objectType: public_accounts
+  source:
+    dataConnectorName: crm
+    collection: public.accounts
+  filterExpressionType: public_accounts_bool_exp
+  aggregateExpression: public_accounts_agg_exp
+  orderByExpression: public_accounts_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: public_accounts
+      subscription:
+        rootField: public_accounts
+    selectUniques:
+      - queryRootField: public_accounts_by_account_id
+        uniqueIdentifier:
+          - account_id
+        subscription:
+          rootField: public_accounts_by_account_id
+    filterInputTypeName: public_accounts_filter_input
+    aggregate:
+      queryRootField: public_accounts_aggregate
+      subscription:
+        rootField: public_accounts_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: public_accounts
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

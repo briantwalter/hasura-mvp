@@ -1,0 +1,16 @@
+kind: Connector
+version: v2
+definition:
+  name: crm
+  subgraph: app
+  source: hasura/postgres-promptql:v1.0.0
+  context: .
+  envMapping:
+    HASURA_SERVICE_TOKEN_SECRET:
+      fromEnv: APP_CRM_HASURA_SERVICE_TOKEN_SECRET
+    JDBC_URL:
+      fromEnv: APP_CRM_JDBC_URL
+    OTEL_EXPORTER_OTLP_ENDPOINT:
+      fromEnv: APP_CRM_OTEL_EXPORTER_OTLP_ENDPOINT
+    OTEL_SERVICE_NAME:
+      fromEnv: APP_CRM_OTEL_SERVICE_NAME

@@ -1,0 +1,161 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: public_contacts
+  fields:
+    - name: account_id
+      type: string
+    - name: contact_id
+      type: string!
+    - name: email
+      type: string
+    - name: first_name
+      type: string
+    - name: last_name
+      type: string
+    - name: phone
+      type: string
+  graphql:
+    typeName: public_contacts
+    inputTypeName: public_contacts_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: crm
+      dataConnectorObjectType: public.contacts
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: public_contacts
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - account_id
+          - contact_id
+          - email
+          - first_name
+          - last_name
+          - phone
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: public_contacts_bool_exp
+  operand:
+    object:
+      type: public_contacts
+      comparableFields:
+        - fieldName: account_id
+          booleanExpressionType: text_bool_exp
+        - fieldName: contact_id
+          booleanExpressionType: text_bool_exp
+        - fieldName: email
+          booleanExpressionType: text_bool_exp
+        - fieldName: first_name
+          booleanExpressionType: text_bool_exp
+        - fieldName: last_name
+          booleanExpressionType: text_bool_exp
+        - fieldName: phone
+          booleanExpressionType: text_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: public_contacts_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: public_contacts_agg_exp
+  operand:
+    object:
+      aggregatedType: public_contacts
+      aggregatableFields:
+        - fieldName: account_id
+          aggregateExpression: text_agg_exp
+        - fieldName: contact_id
+          aggregateExpression: text_agg_exp
+        - fieldName: email
+          aggregateExpression: text_agg_exp
+        - fieldName: first_name
+          aggregateExpression: text_agg_exp
+        - fieldName: last_name
+          aggregateExpression: text_agg_exp
+        - fieldName: phone
+          aggregateExpression: text_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: public_contacts_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: public_contacts_order_by_exp
+  operand:
+    object:
+      orderedType: public_contacts
+      orderableFields:
+        - fieldName: account_id
+          orderByExpression: string_order_by_exp
+        - fieldName: contact_id
+          orderByExpression: string_order_by_exp
+        - fieldName: email
+          orderByExpression: string_order_by_exp
+        - fieldName: first_name
+          orderByExpression: string_order_by_exp
+        - fieldName: last_name
+          orderByExpression: string_order_by_exp
+        - fieldName: phone
+          orderByExpression: string_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: public_contacts_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: public_contacts
+  objectType: public_contacts
+  source:
+    dataConnectorName: crm
+    collection: public.contacts
+  filterExpressionType: public_contacts_bool_exp
+  aggregateExpression: public_contacts_agg_exp
+  orderByExpression: public_contacts_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: public_contacts
+      subscription:
+        rootField: public_contacts
+    selectUniques:
+      - queryRootField: public_contacts_by_contact_id
+        uniqueIdentifier:
+          - contact_id
+        subscription:
+          rootField: public_contacts_by_contact_id
+    filterInputTypeName: public_contacts_filter_input
+    aggregate:
+      queryRootField: public_contacts_aggregate
+      subscription:
+        rootField: public_contacts_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: public_contacts
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

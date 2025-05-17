@@ -1,0 +1,64 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: HelloResult
+  fields:
+    - name: count
+      type: int32!
+    - name: reply
+      type: String!
+  graphql:
+    typeName: HelloResult
+    inputTypeName: HelloResult_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: hellogo
+      dataConnectorObjectType: HelloResult
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: HelloResult
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - count
+          - reply
+
+---
+kind: Command
+version: v1
+definition:
+  name: hello
+  outputType: HelloResult
+  arguments:
+    - name: count
+      type: int32
+    - name: greeting
+      type: String!
+  source:
+    dataConnectorName: hellogo
+    dataConnectorCommand:
+      function: hello
+  graphql:
+    rootFieldName: hello
+    rootFieldKind: Query
+  description: "sends a hello message Function is an operation type of query, the
+    name of function will be `hello`  Example:  curl http://localhost:8080/query
+    -H 'content-type: application/json' -d \\ '{ \"collection\": \"hello\",
+    \"arguments\": { \"greeting\": { \"type\": \"literal\", \"value\": \"Hello
+    world!\" } }, \"collection_relationships\": {}, \"query\": { \"fields\": {
+    \"reply\": { \"type\": \"column\", \"column\": \"reply\" }, \"count\": {
+    \"type\": \"column\", \"column\": \"count\" } } } }'"
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: hello
+  permissions:
+    - role: admin
+      allowExecution: true
+

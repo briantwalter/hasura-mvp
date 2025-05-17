@@ -1,0 +1,461 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: crm
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_CRM_READ_URL
+      write:
+        valueFromEnv: APP_CRM_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_CRM_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      scalar_types:
+        date:
+          representation:
+            type: date
+          aggregate_functions:
+            max:
+              result_type:
+                name: date
+                type: named
+            min:
+              result_type:
+                name: date
+                type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                name: date
+                type: named
+            _gte:
+              type: custom
+              argument_type:
+                name: date
+                type: named
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                name: date
+                type: named
+            _lte:
+              type: custom
+              argument_type:
+                name: date
+                type: named
+            _neq:
+              type: custom
+              argument_type:
+                name: date
+                type: named
+        numeric:
+          representation:
+            type: bigdecimal
+          aggregate_functions:
+            avg:
+              result_type:
+                name: numeric
+                type: named
+            max:
+              result_type:
+                name: numeric
+                type: named
+            min:
+              result_type:
+                name: numeric
+                type: named
+            stddev_pop:
+              result_type:
+                name: numeric
+                type: named
+            stddev_samp:
+              result_type:
+                name: numeric
+                type: named
+            sum:
+              result_type:
+                name: numeric
+                type: named
+            var_pop:
+              result_type:
+                name: numeric
+                type: named
+            var_samp:
+              result_type:
+                name: numeric
+                type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                name: numeric
+                type: named
+            _gte:
+              type: custom
+              argument_type:
+                name: numeric
+                type: named
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                name: numeric
+                type: named
+            _lte:
+              type: custom
+              argument_type:
+                name: numeric
+                type: named
+            _neq:
+              type: custom
+              argument_type:
+                name: numeric
+                type: named
+        text:
+          representation:
+            type: string
+          aggregate_functions:
+            max:
+              result_type:
+                name: text
+                type: named
+            min:
+              result_type:
+                name: text
+                type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _gte:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _ilike:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _in:
+              type: in
+            _iregex:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _like:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _lt:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _lte:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _neq:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _nilike:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _niregex:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _nlike:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _nregex:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+            _regex:
+              type: custom
+              argument_type:
+                name: text
+                type: named
+      object_types:
+        public.accounts:
+          fields:
+            account_id:
+              type:
+                name: text
+                type: named
+              arguments: {}
+            account_name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            billing_city:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            billing_country:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            billing_state:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            industry:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+        public.contacts:
+          fields:
+            account_id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            contact_id:
+              type:
+                name: text
+                type: named
+              arguments: {}
+            email:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            first_name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            last_name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            phone:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+        public.customers:
+          fields:
+            account_id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            customer_id:
+              type:
+                name: text
+                type: named
+              arguments: {}
+            email:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            hvac_system_type:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+        public.opportunities:
+          fields:
+            account_id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            amount:
+              type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+              arguments: {}
+            close_date:
+              type:
+                type: nullable
+                underlying_type:
+                  name: date
+                  type: named
+              arguments: {}
+            name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            opportunity_id:
+              type:
+                name: text
+                type: named
+              arguments: {}
+            stage:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+        public.tasks:
+          fields:
+            due_date:
+              type:
+                type: nullable
+                underlying_type:
+                  name: date
+                  type: named
+              arguments: {}
+            priority:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            related_to:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            status:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            subject:
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+              arguments: {}
+            task_id:
+              type:
+                name: text
+                type: named
+              arguments: {}
+      collections:
+        - name: public.accounts
+          arguments: {}
+          type: public.accounts
+          uniqueness_constraints:
+            account_id:
+              unique_columns:
+                - account_id
+          foreign_keys: {}
+        - name: public.contacts
+          arguments: {}
+          type: public.contacts
+          uniqueness_constraints:
+            contact_id:
+              unique_columns:
+                - contact_id
+          foreign_keys: {}
+        - name: public.customers
+          arguments: {}
+          type: public.customers
+          uniqueness_constraints:
+            customer_id:
+              unique_columns:
+                - customer_id
+          foreign_keys: {}
+        - name: public.opportunities
+          arguments: {}
+          type: public.opportunities
+          uniqueness_constraints:
+            opportunity_id:
+              unique_columns:
+                - opportunity_id
+          foreign_keys: {}
+        - name: public.tasks
+          arguments: {}
+          type: public.tasks
+          uniqueness_constraints:
+            task_id:
+              unique_columns:
+                - task_id
+          foreign_keys: {}
+      functions: []
+      procedures: []
+    capabilities:
+      version: 0.1.6
+      capabilities:
+        query:
+          aggregates: {}
+          variables: {}
+        mutation: {}

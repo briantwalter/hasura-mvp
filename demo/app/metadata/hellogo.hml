@@ -1,0 +1,89 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: hellogo
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_HELLOGO_READ_URL
+      write:
+        valueFromEnv: APP_HELLOGO_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_HELLOGO_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      scalar_types:
+        Int32:
+          representation:
+            type: int32
+          aggregate_functions: {}
+          comparison_operators: {}
+        String:
+          representation:
+            type: string
+          aggregate_functions: {}
+          comparison_operators: {}
+      object_types:
+        CreateAuthorResult:
+          fields:
+            id:
+              type:
+                name: Int32
+                type: named
+            name:
+              type:
+                name: String
+                type: named
+        HelloResult:
+          fields:
+            count:
+              type:
+                name: Int32
+                type: named
+            reply:
+              type:
+                name: String
+                type: named
+      collections: []
+      functions:
+        - name: hello
+          description: 'sends a hello message Function is an operation type of query, the name of function will be `hello`  Example:  curl http://localhost:8080/query -H ''content-type: application/json'' -d \ ''{ "collection": "hello", "arguments": { "greeting": { "type": "literal", "value": "Hello world!" } }, "collection_relationships": {}, "query": { "fields": { "reply": { "type": "column", "column": "reply" }, "count": { "type": "column", "column": "count" } } } }'''
+          arguments:
+            count:
+              type:
+                type: nullable
+                underlying_type:
+                  name: Int32
+                  type: named
+            greeting:
+              type:
+                name: String
+                type: named
+          result_type:
+            type: nullable
+            underlying_type:
+              name: HelloResult
+              type: named
+      procedures:
+        - name: createAuthor
+          description: 'creates an author Procedure is an operation type of mutation, the name of function will be `createAuthor`  Example:  curl http://localhost:8080/mutation -H ''content-type: application/json'' -d \ ''{ "operations": [ { "type": "procedure", "name": "createAuthor", "arguments": { "name": "John" }, "fields": { "type": "object", "fields": { "id": { "type": "column", "column": "id" }, "name": { "type": "column", "column": "name" } } } } ], "collection_relationships": {} }'''
+          arguments:
+            name:
+              type:
+                name: String
+                type: named
+          result_type:
+            type: nullable
+            underlying_type:
+              name: CreateAuthorResult
+              type: named
+    capabilities:
+      version: 0.1.6
+      capabilities:
+        query:
+          variables: {}
+          nested_fields: {}
+          exists: {}
+        mutation: {}

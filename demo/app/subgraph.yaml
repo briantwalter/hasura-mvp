@@ -1,0 +1,27 @@
+kind: Subgraph
+version: v2
+definition:
+  name: app
+  generator:
+    rootPath: .
+    namingConvention: none
+  includePaths:
+    - metadata
+  envMapping:
+    APP_CRM_AUTHORIZATION_HEADER:
+      fromEnv: APP_CRM_AUTHORIZATION_HEADER
+    APP_CRM_READ_URL:
+      fromEnv: APP_CRM_READ_URL
+    APP_CRM_WRITE_URL:
+      fromEnv: APP_CRM_WRITE_URL
+    APP_HELLOGO_AUTHORIZATION_HEADER:
+      fromEnv: APP_HELLOGO_AUTHORIZATION_HEADER
+    APP_HELLOGO_READ_URL:
+      fromEnv: APP_HELLOGO_READ_URL
+    APP_HELLOGO_WRITE_URL:
+      fromEnv: APP_HELLOGO_WRITE_URL
+  connectors:
+    - path: connector/crm/connector.yaml
+      connectorLinkName: crm
+    - path: connector/hellogo/connector.yaml
+      connectorLinkName: hellogo

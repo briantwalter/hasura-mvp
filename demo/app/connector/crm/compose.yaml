@@ -1,0 +1,14 @@
+services:
+  app_crm:
+    build:
+      context: .
+      dockerfile: .hasura-connector/Dockerfile.crm
+    environment:
+      HASURA_SERVICE_TOKEN_SECRET: $APP_CRM_HASURA_SERVICE_TOKEN_SECRET
+      JDBC_URL: $APP_CRM_JDBC_URL
+      OTEL_EXPORTER_OTLP_ENDPOINT: $APP_CRM_OTEL_EXPORTER_OTLP_ENDPOINT
+      OTEL_SERVICE_NAME: $APP_CRM_OTEL_SERVICE_NAME
+    extra_hosts:
+      - local.hasura.dev:host-gateway
+    ports:
+      - 9154:8080
