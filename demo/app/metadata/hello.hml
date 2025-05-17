@@ -35,8 +35,10 @@ definition:
   outputType: HelloResult
   arguments:
     - name: count
+      description: A number to send back
       type: int32
     - name: greeting
+      description: A message to send back
       type: String!
   source:
     dataConnectorName: hellogo
@@ -47,11 +49,7 @@ definition:
     rootFieldKind: Query
   description: >
    Sends a hello message Function is an operation type of query, the
-   name of function will be `hello`  Example:
-
-   ```
-   curl http://localhost:8080/query -H 'content-type: application/json' -d \ '{ "collection": "hello", "arguments": { "greeting": { "type": "literal", "value": "Hello world!" } }, "collection_relationships": {}, "query": { "fields": { "reply": { "type": "column", "column": "reply" }, "count": { "type": "column", "column": "count" } } } }'
-   ```
+   name of function will be `hello`  
  
 ---
 kind: CommandPermissions
