@@ -25,7 +25,7 @@ type ServiceInfoResponse struct {
 
 // DatabaseRow represents the data returned from the database query
 type DatabaseRow struct {
-	ID          int    `json:"id"`
+	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
@@ -127,7 +127,7 @@ func queryDatabaseByEnvironment(environment string) (DatabaseRow, error) {
 	if os.Getenv("APP_ENV") == "development" || os.Getenv("DB_HOST") == "" {
 		// Return mock data for development/testing
 		return DatabaseRow{
-			ID:          1,
+			ID:          "1",
 			Name:        fmt.Sprintf("%s-service", environment),
 			Description: fmt.Sprintf("This is a %s environment service", environment),
 		}, nil
@@ -152,8 +152,11 @@ func queryDatabaseByEnvironment(environment string) (DatabaseRow, error) {
 	defer db.Close()
 
 	// Query the database
-	query := "SELECT id, name, description FROM table_name WHERE environment = $1 LIMIT 1"
-	row := db.QueryRow(query, environment)
+	// query := "SELECT id, name, description FROM table_name WHERE environment = $1 LIMIT 1"
+	query := "SELECT opportunity_id as id, amount as name, stage as description FROM opportunities WHERE opportunity_id = 'O3000' LIMIT 1"
+
+	//row := db.QueryRow(query, environment)
+	row := db.QueryRow(query)
 
 	// Scan the result into a DatabaseRow struct
 	var result DatabaseRow

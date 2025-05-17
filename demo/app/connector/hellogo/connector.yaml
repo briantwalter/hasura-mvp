@@ -6,6 +6,18 @@ definition:
   source: hasura/go:v1.9.0
   context: .
   envMapping:
+    APP_ENV:
+      fromEnv: APP_HELLOGO_APP_ENV
+    DB_HOST:
+      fromEnv: APP_HELLOGO_DB_HOST
+    DB_NAME:
+      fromEnv: APP_HELLOGO_DB_NAME
+    DB_PASSWORD:
+      fromEnv: APP_HELLOGO_DB_PASSWORD
+    DB_PORT:
+      fromEnv: APP_HELLOGO_DB_PORT
+    DB_USER:
+      fromEnv: APP_HELLOGO_DB_USER
     HASURA_SERVICE_TOKEN_SECRET:
       fromEnv: APP_HELLOGO_HASURA_SERVICE_TOKEN_SECRET
     MUTATION_CONCURRENCY_LIMIT:
